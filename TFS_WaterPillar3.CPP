@@ -1,5 +1,5 @@
 #include<iostream.h>
-#include<conio.h>
+#include<stdlib.h>
 #include<string.h>
 using namespace std;
 int cw(int piece)
@@ -23,7 +23,7 @@ int main()
  char move[3];
  do
  {
- clrscr();
+ system("cls");
  cout<<"TFS PUZZLE SIMULATOR:\n";
  cout<<"\nCurrent positions are:";
  cout<<"Lower Piece: "<<l<<endl;
