@@ -1,5 +1,5 @@
 # Prince of Persia series puzzle simulators
-The are simulations of various puzzles among PoP series, mainly created for the purpose of finding the optimal solutions of them through bruteforce.
+These are simulations of various puzzles among PoP series, mainly created for the purpose of finding the optimal solutions of them through bruteforce.
 The code I have put here are just the simulation part itself, the loop part is not that hard to implement, its just a bunch of nested 'for' loops.
 
 # How to use:
