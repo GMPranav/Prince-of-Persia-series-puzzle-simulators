@@ -1,15 +1,11 @@
-#include <algorithm>
-#include <cctype>
 #include <iostream>
 #include <string>
 #include <vector>
 
-using namespace std;
+#include "PuzzleCommon.h"
+#include "T2TKingPuzzle.h"
 
-void clearScreenPart()
-{
-    cout << "\033[H\033[J";
-}
+using namespace std;
 
 void printRotationalPosition(int rotationalPosition)
 {
@@ -34,24 +30,16 @@ void printRotationalPosition(int rotationalPosition)
 int main()
 {
     vector<string> moves;
-    const vector<string> possibleMoves[4][6] = {
-        { { "fw", "aw" }, { "bw", "cw" }, { "fw", "aw" }, { "bw", "cw" }, { "fw", "cw" }, {} },
-        { { "fw", "cw" }, { "fw", "bw", "aw" }, { "fw", "cw" }, { "bw", "aw" }, { "fw" }, { "bw", "cw" } },
-        { {}, { "fw", "cw", "aw" }, { "fw", "bw" }, { "bw", "cw" }, { "fw", "aw" }, { "bw", "aw" } },
-        { {}, { "cw", "aw" }, { "fw" }, { "fw", "aw" }, { "fw", "bw", "cw", "aw" }, { "bw", "cw" } }
-    };
-
-    int translationalPosition = 0;
-    int rotationalPosition = 0;
+    T2TKingPuzzle::State state = T2TKingPuzzle::initial();
     string choice;
 
     do {
-        clearScreenPart();
+        clearScreen();
         cout << "T2T King Statue Puzzle Simulator:" << endl
              << endl;
-        cout << "Translational position: " << translationalPosition << endl;
+        cout << "Translational position: " << state.translationalPosition << endl;
         cout << "Rotational position: ";
-        printRotationalPosition(rotationalPosition);
+        printRotationalPosition(state.rotationalPosition);
         cout << endl
              << endl;
         cout << "Legend (not case sensitive):" << endl
@@ -63,33 +51,18 @@ int main()
              << endl;
 
         cout << "Input your choice: ";
-        cin >> choice;
-        transform(choice.begin(), choice.end(), choice.begin(), ::tolower);
+        choice = readChoice();
 
-        vector<string> possibleChoices = possibleMoves[rotationalPosition][translationalPosition];
-
-        if (find(possibleChoices.begin(), possibleChoices.end(), choice) != possibleChoices.end()) {
+        if (T2TKingPuzzle::apply(state, choice)) {
             moves.push_back(choice);
-            if (choice == "fw") {
-                translationalPosition++;
-                if (translationalPosition == 5) {
-                    cout << endl
-                         << endl
-                         << "You beat the puzzle !" << endl;
-                    cout << "Nice moves! ";
-                    for (string move : moves) {
-                        cout << move << " ";
-                    }
-                    cin.get();
-                    cin.get();
-                    break;
-                }
-            } else if (choice == "bw") {
-                translationalPosition--;
-            } else if (choice == "cw") {
-                rotationalPosition = (rotationalPosition + 3) % 4;
-            } else if (choice == "aw") {
-                rotationalPosition = (rotationalPosition + 1) % 4;
+            if (T2TKingPuzzle::isSolved(state)) {
+                cout << endl
+                     << endl
+                     << "You beat the puzzle !" << endl;
+                cout << "Nice moves! ";
+                printMoves(moves);
+                waitForKey();
+                break;
             }
         }
     } while (choice != "ex");
